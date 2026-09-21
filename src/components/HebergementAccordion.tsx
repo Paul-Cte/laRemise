@@ -154,7 +154,7 @@ const Carousel = ({ photos }: { photos: Photo[] }) => {
           {/* Close Button */}
           <button 
             onClick={closeLightbox}
-            className="absolute top-4 right-4 md:top-8 md:right-8 text-white p-3 hover:bg-white/20 rounded-full z-[99999] transition-colors cursor-pointer"
+            className="absolute top-4 right-4 md:top-8 md:right-8 text-white p-3 bg-black/50 hover:bg-black/80 rounded-full z-[99999] transition-colors cursor-pointer shadow-lg"
             aria-label="Fermer"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-8 h-8">
@@ -162,13 +162,13 @@ const Carousel = ({ photos }: { photos: Photo[] }) => {
             </svg>
           </button>
 
-          {/* Left Arrow (Lightbox) */}
+          {/* Left Arrow (Desktop) */}
           <button 
             onClick={lightboxPrev}
-            className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 text-white p-3 md:p-4 hover:bg-white/20 rounded-full z-[99999] transition-colors cursor-pointer"
+            className="hidden md:block absolute left-8 top-1/2 -translate-y-1/2 text-white p-4 bg-black/50 hover:bg-black/80 rounded-full z-[99999] transition-colors cursor-pointer shadow-lg"
             aria-label="Photo précédente"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-8 h-8 md:w-10 md:h-10">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-10 h-10">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
             </svg>
           </button>
@@ -183,20 +183,47 @@ const Carousel = ({ photos }: { photos: Photo[] }) => {
             />
           </div>
 
-          {/* Right Arrow (Lightbox) */}
+          {/* Right Arrow (Desktop) */}
           <button 
             onClick={lightboxNext}
-            className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 text-white p-3 md:p-4 hover:bg-white/20 rounded-full z-[99999] transition-colors cursor-pointer"
+            className="hidden md:block absolute right-8 top-1/2 -translate-y-1/2 text-white p-4 bg-black/50 hover:bg-black/80 rounded-full z-[99999] transition-colors cursor-pointer shadow-lg"
             aria-label="Photo suivante"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-8 h-8 md:w-10 md:h-10">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-10 h-10">
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
             </svg>
           </button>
 
-          {/* Counter */}
-          <div className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 text-white font-medium bg-black/50 px-4 py-2 rounded-full text-sm tracking-widest backdrop-blur-sm pointer-events-none">
+          {/* Counter (Desktop) */}
+          <div className="hidden md:block absolute bottom-8 left-1/2 -translate-x-1/2 text-white font-medium bg-black/50 px-4 py-2 rounded-full text-sm tracking-widest backdrop-blur-sm pointer-events-none shadow-lg">
             {lightboxIndex + 1} / {photos.length}
+          </div>
+
+          {/* Mobile Navigation Bar (Bottom) */}
+          <div className="absolute bottom-6 w-full flex md:hidden items-center justify-center gap-6 z-[99999]" onClick={(e) => e.stopPropagation()}>
+            <button 
+              onClick={lightboxPrev}
+              className="text-white p-3 bg-black/50 hover:bg-black/80 rounded-full transition-colors cursor-pointer shadow-lg"
+              aria-label="Photo précédente"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+              </svg>
+            </button>
+
+            <div className="text-white font-medium bg-black/50 px-4 py-2 rounded-full text-sm tracking-widest backdrop-blur-sm pointer-events-none shadow-lg">
+              {lightboxIndex + 1} / {photos.length}
+            </div>
+
+            <button 
+              onClick={lightboxNext}
+              className="text-white p-3 bg-black/50 hover:bg-black/80 rounded-full transition-colors cursor-pointer shadow-lg"
+              aria-label="Photo suivante"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
+            </button>
           </div>
         </div>,
         document.body

@@ -58,10 +58,10 @@ export default async function Home() {
             aria-label="Découvrir le gîte"
           >
             <section
-              className="rounded-4xl overflow-hidden border-5 border-primary w-[98vw] h-[calc(100dvh-103px)] flex flex-col items-center justify-center bg-cover bg-center relative transition-transform duration-700 ease-out group-hover:scale-[0.99]"
+              className="rounded-4xl overflow-hidden border-5 border-primary w-[98vw] h-[calc(100dvh-103px)] flex flex-col items-center justify-center bg-cover bg-center relative transition-transform duration-700 ease-out [@media(hover:hover)]:group-hover:scale-[0.99]"
               style={{ backgroundImage: `url('${heroImage}')` }}
             >
-              <div className="absolute inset-0 bg-black/40 z-0 transition-colors duration-700 group-hover:bg-black/50"></div>
+              <div className="absolute inset-0 bg-black/40 z-0 transition-colors duration-700 [@media(hover:hover)]:group-hover:bg-black/50"></div>
               <div className="relative z-10 text-center text-white p-4">
                 <h1 className="text-7xl md:text-9xl font-bold mb-4 tracking-tight">LA <span className="text-secondary">REMISE.</span></h1>
                 <p className="text-3xl md:text-5xl font-light italic font-tangerine">Gîte à la montagne - Montmaur, France</p>

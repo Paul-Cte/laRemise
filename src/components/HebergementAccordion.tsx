@@ -32,7 +32,7 @@ const AccordionItem = ({ title, isOpen, onClick, children }: any) => {
       {/* Expandable content area */}
       <div 
         className={`overflow-hidden transition-all duration-300 ease-in-out ${
-          isOpen ? 'max-h-[500px] opacity-100 mt-4 mb-6' : 'max-h-0 opacity-0'
+          isOpen ? 'max-h-[1000px] opacity-100 mt-4 mb-6' : 'max-h-0 opacity-0'
         }`}
       >
         <div className="px-0">
@@ -44,9 +44,23 @@ const AccordionItem = ({ title, isOpen, onClick, children }: any) => {
 };
 
 import { useRef } from 'react';
+import { createPortal } from 'react-dom';
 
 const Carousel = ({ photos }: { photos: Photo[] }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  // Empêcher le scroll du body quand la lightbox est ouverte
+  React.useEffect(() => {
+    if (lightboxIndex !== null) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [lightboxIndex]);
 
   if (photos.length === 0) {
     return <div className="py-8 text-center text-white/70 italic">Aucune photo pour l'instant dans cette catégorie...</div>;
@@ -64,49 +78,130 @@ const Carousel = ({ photos }: { photos: Photo[] }) => {
     }
   };
 
-  return (
-    <div className="relative group">
-      {/* Scroll Left Button */}
-      <button 
-        onClick={scrollLeft}
-        className="cursor-pointer absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-black/80 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-0"
-        aria-label="Défiler vers la gauche"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-5 h-5">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-        </svg>
-      </button>
+  const openLightbox = (index: number) => setLightboxIndex(index);
+  const closeLightbox = () => setLightboxIndex(null);
+  
+  const lightboxPrev = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (lightboxIndex !== null) {
+      setLightboxIndex(lightboxIndex === 0 ? photos.length - 1 : lightboxIndex - 1);
+    }
+  };
+  
+  const lightboxNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (lightboxIndex !== null) {
+      setLightboxIndex((lightboxIndex + 1) % photos.length);
+    }
+  };
 
-      <div 
-        ref={scrollContainerRef}
-        className="flex gap-4 overflow-x-auto pb-4 relative w-full snap-x scrollbar-hide"
-      >
-        {photos.map((photo, index) => (
-          <div 
-            key={photo.id} 
-            className={`shrink-0 overflow-hidden ${index === 0 ? 'w-[85%] md:w-[75%]' : 'w-[60%] md:w-[40%]'} aspect-[4/3] shadow-lg snap-center`}
+  return (
+    <>
+      <div className="relative group">
+        <div 
+          ref={scrollContainerRef}
+          className="flex gap-4 overflow-x-auto pb-4 relative w-full snap-x scrollbar-hide"
+        >
+          {photos.map((photo, index) => (
+            <div 
+              key={photo.id} 
+              onClick={() => openLightbox(index)}
+              className={`cursor-pointer shrink-0 overflow-hidden ${index === 0 ? 'w-[85%] md:w-[75%]' : 'w-[60%] md:w-[40%]'} aspect-[4/3] shadow-lg snap-center hover:opacity-95 transition-opacity`}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img 
+                src={photo.url} 
+                alt={photo.texte_alternatif || `Vue ${index + 1}`} 
+                className="w-full h-full object-cover"
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Scroll Left Button - Centrage parfait avec absolute 0, bottom 1rem, flex center */}
+        <div className="absolute left-2 top-0 bottom-4 flex items-center pointer-events-none">
+          <button 
+            onClick={scrollLeft}
+            className="pointer-events-auto cursor-pointer z-10 bg-black/50 hover:bg-black/80 text-white p-2 rounded-full md:opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-0 shadow-md"
+            aria-label="Défiler vers la gauche"
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img 
-              src={photo.url} 
-              alt={photo.texte_alternatif || `Vue ${index + 1}`} 
-              className="w-full h-full object-cover"
-            />
-          </div>
-        ))}
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-5 h-5 md:w-6 md:h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Scroll Right Button - Centrage parfait avec absolute 0, bottom 1rem, flex center */}
+        <div className="absolute right-2 top-0 bottom-4 flex items-center pointer-events-none">
+          <button 
+            onClick={scrollRight}
+            className="pointer-events-auto cursor-pointer z-10 bg-black/50 hover:bg-black/80 text-white p-2 rounded-full md:opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-0 shadow-md"
+            aria-label="Défiler vers la droite"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-5 h-5 md:w-6 md:h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          </button>
+        </div>
       </div>
 
-      {/* Scroll Right Button */}
-      <button 
-        onClick={scrollRight}
-        className="cursor-pointer absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-black/80 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-0"
-        aria-label="Défiler vers la droite"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-5 h-5">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-        </svg>
-      </button>
-    </div>
+      {/* Lightbox / Fullscreen Viewer */}
+      {lightboxIndex !== null && typeof document !== 'undefined' && createPortal(
+        <div 
+          className="fixed inset-0 z-[9999] bg-black/95 flex items-center justify-center p-0 md:p-8"
+          onClick={closeLightbox}
+        >
+          {/* Close Button */}
+          <button 
+            onClick={closeLightbox}
+            className="absolute top-4 right-4 md:top-8 md:right-8 text-white p-3 hover:bg-white/20 rounded-full z-[99999] transition-colors cursor-pointer"
+            aria-label="Fermer"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-8 h-8">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          {/* Left Arrow (Lightbox) */}
+          <button 
+            onClick={lightboxPrev}
+            className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 text-white p-3 md:p-4 hover:bg-white/20 rounded-full z-[99999] transition-colors cursor-pointer"
+            aria-label="Photo précédente"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-8 h-8 md:w-10 md:h-10">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            </svg>
+          </button>
+
+          {/* Image */}
+          <div className="w-full h-full flex items-center justify-center relative" onClick={(e) => e.stopPropagation()}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img 
+              src={photos[lightboxIndex].url} 
+              alt={photos[lightboxIndex].texte_alternatif || `Vue ${lightboxIndex + 1}`} 
+              className="max-w-full max-h-[85vh] md:max-h-full object-contain pointer-events-none select-none"
+            />
+          </div>
+
+          {/* Right Arrow (Lightbox) */}
+          <button 
+            onClick={lightboxNext}
+            className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 text-white p-3 md:p-4 hover:bg-white/20 rounded-full z-[99999] transition-colors cursor-pointer"
+            aria-label="Photo suivante"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-8 h-8 md:w-10 md:h-10">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          </button>
+
+          {/* Counter */}
+          <div className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 text-white font-medium bg-black/50 px-4 py-2 rounded-full text-sm tracking-widest backdrop-blur-sm pointer-events-none">
+            {lightboxIndex + 1} / {photos.length}
+          </div>
+        </div>,
+        document.body
+      )}
+    </>
   );
 };
 

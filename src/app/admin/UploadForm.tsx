@@ -2,22 +2,21 @@
 
 import { useState } from 'react'
 import { uploadPhoto } from '@/app/actions/photos'
+import SubmitButton from '@/components/admin/SubmitButton'
 
 export default function UploadForm({ categories }: { categories: any[] }) {
   const [fileNames, setFileNames] = useState<string[] | null>(null)
-  const [isPending, setIsPending] = useState(false)
 
   return (
     <form 
       id="upload-form"
       action={async (formData) => {
-        setIsPending(true)
         await uploadPhoto(formData)
         setFileNames(null)
-        setIsPending(false)
         const form = document.getElementById('upload-form') as HTMLFormElement
         if (form) form.reset()
       }} 
+
       className="flex flex-col gap-5 relative z-10"
     >
       <div className={`group relative border-2 border-dashed rounded-2xl p-6 text-center transition-colors duration-300 ${fileNames && fileNames.length > 0 ? 'border-[#7e7ea8] bg-[#f5f5f5]' : 'border-gray-200 hover:border-[#7e7ea8] bg-gray-50/50 hover:bg-[#f5f5f5]/80'}`}>
@@ -86,21 +85,12 @@ export default function UploadForm({ categories }: { categories: any[] }) {
         />
       </div>
 
-      <button 
-        type="submit"
-        disabled={isPending}
-        className="mt-2 w-full bg-gradient-to-r from-[#7e7ea8] to-[#9a9ac1] hover:from-[#6b6b93] hover:to-[#7e7ea8] text-white shadow-lg shadow-[#7e7ea8]/30 hover:shadow-[#7e7ea8]/50 font-bold py-3.5 rounded-xl transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+      <SubmitButton 
+        loadingText="Publication en cours..."
+        className="mt-2 w-full bg-gradient-to-r from-[#7e7ea8] to-[#9a9ac1] hover:from-[#6b6b93] hover:to-[#7e7ea8] text-white shadow-lg shadow-[#7e7ea8]/30 hover:shadow-[#7e7ea8]/50 font-bold py-3.5 rounded-xl transition-all duration-300 active:scale-[0.98]"
       >
-        {isPending ? (
-           <span className="flex items-center gap-2">
-             <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-             </svg>
-             Publication en cours...
-           </span>
-        ) : (fileNames && fileNames.length > 1 ? `Publier les ${fileNames.length} images` : "Publier l'image")}
-      </button>
+        {fileNames && fileNames.length > 1 ? `Publier les ${fileNames.length} images` : "Publier l'image"}
+      </SubmitButton>
     </form>
   )
 }

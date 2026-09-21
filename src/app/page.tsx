@@ -1,65 +1,107 @@
-import Image from "next/image";
+import { getPhotos } from './actions/photos'
+import { getCategories } from './actions/categories'
+import { getSetting } from './actions/settings'
+import Menu from '@/components/Menu'
+import Title from '@/components/Title'
+import Presentation from '@/components/Presentation'
+import Banner from '@/components/Banner'
+import BannerReserve from '@/components/BannerReserve'
+import HebergementAccordion from '@/components/HebergementAccordion'
+import ActivitiesSection from '@/components/ActivitiesSection'
+import Timeline from '@/components/Timeline'
+import ContactSection from '@/components/ContactSection'
+import Footer from '@/components/Footer'
 
-export default function Home() {
+export const revalidate = 60 // Revalidate cache every 60 seconds
+
+export default async function Home() {
+  const photos = await getPhotos()
+  const categories = await getCategories()
+  const heroImage = await getSetting('hero_image')
+
+  const activitiesDataRaw = await getSetting('activities_data');
+  let activitiesData = undefined;
+  if (activitiesDataRaw) {
+    try {
+      const cleanedRaw = activitiesDataRaw
+        .replace(/\n/g, "\\n")
+        .replace(/\r/g, "\\r")
+        .replace(/[\x00-\x09\x0B-\x0C\x0E-\x1F\x7F-\x9F]/g, "");
+      activitiesData = JSON.parse(cleanedRaw);
+    } catch (e) {
+      console.warn("Erreur de parsing activitiesData sur la page d'accueil:", e);
+    }
+  }
+
+  const timelineDataRaw = await getSetting('timeline_data');
+  let timelineData = undefined;
+  if (timelineDataRaw) {
+    try {
+      const cleanedRaw = timelineDataRaw
+        .replace(/\n/g, "\\n")
+        .replace(/\r/g, "\\r")
+        .replace(/[\x00-\x09\x0B-\x0C\x0E-\x1F\x7F-\x9F]/g, "");
+      timelineData = JSON.parse(cleanedRaw);
+    } catch (e) {
+      console.warn("Erreur de parsing timelineData sur la page d'accueil:", e);
+    }
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <>
+      <Menu />
+      <main className="flex flex-col items-center justify-center">
+        {heroImage && (
+          <a 
+            href="#presentation" 
+            className="block cursor-pointer w-full flex justify-center group"
+            aria-label="Découvrir le gîte"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
+            <section
+              className="rounded-4xl overflow-hidden border-5 border-primary w-[98vw] h-[calc(100dvh-103px)] flex flex-col items-center justify-center bg-cover bg-center relative transition-transform duration-700 ease-out group-hover:scale-[0.99]"
+              style={{ backgroundImage: `url('${heroImage}')` }}
+            >
+              <div className="absolute inset-0 bg-black/40 z-0 transition-colors duration-700 group-hover:bg-black/50"></div>
+              <div className="relative z-10 text-center text-white p-4">
+                <h1 className="text-7xl md:text-9xl font-bold mb-4 tracking-tight">LA <span className="text-secondary">REMISE.</span></h1>
+                <p className="text-3xl md:text-5xl font-light italic font-tangerine">Gîte à la montagne - Montmaur, France</p>
+              </div>
+            </section>
           </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        )}
+
+        <section className="w-full max-w-7xl mx-auto p-4 mt-8" id="presentation">
+          <Title text="PRÉSENTATION" />
+          <Presentation />
+        </section>
+
+        <Banner />
+
+        <div className="w-full bg-primary relative z-10 -mt-24 pt-32 pb-10">
+          <section className="w-full max-w-7xl mx-auto p-4" id="hebergement">
+              <Title text="HÉBERGEMENT" />
+              <HebergementAccordion categories={categories} photos={photos} />
+          </section>
         </div>
+
+        <section className="w-full max-w-7xl mx-auto p-4" id="activites">
+          <Title text="ACTIVITÉS" />
+          <div className="mt-4">
+            <ActivitiesSection activities={activitiesData} />
+            <div className="mt-16 mb-8">
+              <Timeline timelineItems={timelineData} />
+            </div>
+          </div>
+        </section>
+
+        <BannerReserve />
+
+        <section className="w-full max-w-7xl mx-auto p-4 mt-8" id="contact">
+          <Title text="CONTACT" />
+          <ContactSection />
+        </section>
       </main>
-    </div>
-  );
+      <Footer />
+    </>
+  )
 }

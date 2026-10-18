@@ -15,11 +15,18 @@ export default function EquipmentsModal({ isOpen, onClose }: Props) {
     setMounted(true);
   }, []);
 
-  // Prevent scrolling when modal is open
+  // Prevent scrolling when modal is open and handle Escape key
   useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
     if (isOpen) {
       document.body.style.overflow = 'hidden';
       document.documentElement.style.overflow = 'hidden';
+      window.addEventListener('keydown', handleKeyDown);
     } else {
       document.body.style.overflow = '';
       document.documentElement.style.overflow = '';
@@ -27,28 +34,32 @@ export default function EquipmentsModal({ isOpen, onClose }: Props) {
     return () => {
       document.body.style.overflow = '';
       document.documentElement.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isOpen]);
+  }, [isOpen, onClose]);
 
   if (!mounted || !isOpen) return null;
 
   const modalContent = (
-    <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-white overflow-y-auto">
-      {/* Close button */}
-      <button 
-        onClick={onClose}
-        className="cursor-pointer fixed top-6 left-6 z-[110] bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition-colors border border-gray-200"
-        aria-label="Fermer"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
+    <div className="fixed inset-0 z-[99999] bg-white overflow-y-auto">
+      {/* Barre d'en-tête collante avec bouton fermer */}
+      <div className="sticky top-0 z-[110] bg-white/95 backdrop-blur-md px-4 py-3 md:px-8 border-b border-gray-100 flex items-center justify-between">
+        <button 
+          onClick={onClose}
+          className="cursor-pointer bg-white rounded-full p-2 shadow-sm hover:bg-gray-100 transition-colors border border-gray-200 text-gray-800 flex items-center justify-center"
+          aria-label="Fermer"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        <span className="font-semibold text-gray-700 text-sm md:text-base">Équipements du gîte</span>
+        <div className="w-10" aria-hidden="true"></div>
+      </div>
 
-      <div className="text-gray-800 antialiased p-4 md:p-8 lg:p-12 min-h-screen w-full mt-16 md:mt-0">
+      <div className="text-gray-800 antialiased p-4 md:p-8 lg:p-12 w-full">
         <div className="max-w-7xl mx-auto">
-            
-            <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-gray-900 mt-4 md:mt-0">Tout ce que vous trouverez dans le logement</h2>
+            <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-gray-900">Tout ce que vous trouverez dans le logement</h2>
 
             {/* Conteneur Masonry pour les cartes */}
             <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6">

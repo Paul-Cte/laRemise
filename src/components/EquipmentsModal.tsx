@@ -48,7 +48,7 @@ export default function EquipmentsModal({ isOpen, onClose }: Props) {
       <div className="text-gray-800 antialiased p-4 md:p-8 lg:p-12 min-h-screen w-full mt-16 md:mt-0">
         <div className="max-w-7xl mx-auto">
             
-            <h1 className="text-2xl md:text-3xl font-semibold mb-8 text-gray-900 mt-4 md:mt-0">Tout ce que vous trouverez dans le logement</h1>
+            <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-gray-900 mt-4 md:mt-0">Tout ce que vous trouverez dans le logement</h2>
 
             {/* Conteneur Masonry pour les cartes */}
             <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6">

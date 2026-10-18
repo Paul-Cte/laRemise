@@ -4,7 +4,11 @@ import Menu from '@/components/Menu';
 import Footer from '@/components/Footer';
 
 export const metadata = {
-  title: 'Politique de Confidentialité - La Remise',
+  title: 'Politique de Confidentialité',
+  description: 'Politique de confidentialité et protection des données personnelles du site du gîte La Remise à Montmaur.',
+  alternates: {
+    canonical: '/politique-confidentialite',
+  },
 };
 
 export default function PolitiqueConfidentialite() {

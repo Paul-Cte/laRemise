@@ -9,7 +9,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center md:items-end gap-8">
         
         <div className="text-center md:text-left">
-          <h2 className="text-4xl font-tangerine font-bold mb-2 text-secondary">La Remise.</h2>
+          <div className="text-4xl font-tangerine font-bold mb-2 text-secondary">La Remise.</div>
           <p className="text-sm opacity-90 leading-relaxed">
             Gîte rural à la montagne<br />
             665 Route du Devoluy, 05400 Montmaur, France<br />

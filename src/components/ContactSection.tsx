@@ -28,9 +28,9 @@ export default async function ContactSection() {
             </div>
             
             {/* Nom en écriture cursive */}
-            <h2 className="text-6xl md:text-7xl font-bold font-tangerine text-primary">
+            <span className="text-6xl md:text-7xl font-bold font-tangerine text-primary">
               Cindy
-            </h2>
+            </span>
           </div>
 
           {/* Ligne de séparation courte */}
@@ -73,9 +73,9 @@ export default async function ContactSection() {
           <div className="relative bg-white rounded-[2rem] border-[3px] border-primary p-6 md:p-8 shadow-lg">
             
             {/* Titre de la carte */}
-            <h3 className="text-xl md:text-2xl font-bold text-center mb-10 mt-4 leading-snug text-primary">
-              N'hésitez pas à me contacter<br/>pour réserver !
-            </h3>
+            <p className="text-xl md:text-2xl font-bold text-center mb-10 mt-4 leading-snug text-primary">
+              N&apos;hésitez pas à me contacter<br/>pour réserver !
+            </p>
 
             <div className="flex flex-col gap-6 items-center px-4">
               

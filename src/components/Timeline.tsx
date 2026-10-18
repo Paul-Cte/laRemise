@@ -76,9 +76,9 @@ const Timeline = ({ timelineItems = defaultTimelineData }: TimelineProps) => {
               
               {/* Contenu */}
               <div className="bg-white/90 backdrop-blur-sm p-4 rounded-2xl border-2 border-secondary shadow-sm">
-                <h3 className="text-xl font-bold text-primary mb-1">
+                <div className="text-xl font-bold text-primary mb-1">
                   {item.time}
-                </h3>
+                </div>
                 <p className="text-gray-600 text-sm leading-snug">
                   {item.description}
                 </p>
@@ -146,9 +146,9 @@ const Timeline = ({ timelineItems = defaultTimelineData }: TimelineProps) => {
 
                       {/* Le bloc de texte */}
                       <div className={`pl-4 ${item.position === 'top' ? 'pb-4' : 'pt-4'}`}>
-                        <h3 className="text-2xl md:text-3xl font-bold text-primary mb-1">
+                        <div className="text-2xl md:text-3xl font-bold text-primary mb-1">
                           {item.time}
-                        </h3>
+                        </div>
                         <p className="text-gray-500 text-sm md:text-base leading-snug">
                           {item.description}
                         </p>

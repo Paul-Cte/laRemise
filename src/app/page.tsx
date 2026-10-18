@@ -52,22 +52,31 @@ export default async function Home() {
       <Menu />
       <main className="flex flex-col items-center justify-center">
         {heroImage && (
-          <a 
-            href="#presentation" 
-            className="block cursor-pointer w-full flex justify-center group"
-            aria-label="Découvrir le gîte"
+          <section
+            className="rounded-4xl overflow-hidden border-5 border-primary w-[98vw] h-[calc(100dvh-103px)] flex flex-col items-center justify-center bg-cover bg-center relative transition-transform duration-700 ease-out"
+            style={{ backgroundImage: `url('${heroImage}')` }}
+            aria-label="Accueil Gîte La Remise"
           >
-            <section
-              className="rounded-4xl overflow-hidden border-5 border-primary w-[98vw] h-[calc(100dvh-103px)] flex flex-col items-center justify-center bg-cover bg-center relative transition-transform duration-700 ease-out [@media(hover:hover)]:group-hover:scale-[0.99]"
-              style={{ backgroundImage: `url('${heroImage}')` }}
+            <div className="absolute inset-0 bg-black/40 z-0"></div>
+            <div className="relative z-10 text-center text-white p-4">
+              <h1 className="text-7xl md:text-9xl font-bold mb-4 tracking-tight">
+                LA <span className="text-secondary">REMISE.</span>
+              </h1>
+              <p className="text-3xl md:text-5xl font-light italic font-tangerine">
+                Gîte à la montagne — Montmaur, Hautes-Alpes
+              </p>
+            </div>
+            <a 
+              href="#presentation"
+              className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center text-white/90 hover:text-white transition-transform hover:scale-105 cursor-pointer"
+              aria-label="Découvrir le gîte"
             >
-              <div className="absolute inset-0 bg-black/40 z-0 transition-colors duration-700 [@media(hover:hover)]:group-hover:bg-black/50"></div>
-              <div className="relative z-10 text-center text-white p-4">
-                <h1 className="text-7xl md:text-9xl font-bold mb-4 tracking-tight">LA <span className="text-secondary">REMISE.</span></h1>
-                <p className="text-3xl md:text-5xl font-light italic font-tangerine">Gîte à la montagne - Montmaur, France</p>
-              </div>
-            </section>
-          </a>
+              <span className="text-xs uppercase tracking-widest font-semibold mb-1 drop-shadow">Découvrir</span>
+              <svg className="w-6 h-6 animate-bounce drop-shadow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+              </svg>
+            </a>
+          </section>
         )}
 
         <section className="w-full max-w-7xl mx-auto p-4 mt-8" id="presentation">

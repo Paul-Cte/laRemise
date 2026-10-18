@@ -38,8 +38,8 @@ export default function Menu() {
 
   return (
     <>
-      <div className="h-[88px] w-full shrink-0">
-        <nav className="w-full fixed top-0 left-0 z-40 py-4 pointer-events-none">
+      <header className="h-[88px] w-full shrink-0">
+        <nav className="w-full fixed top-0 left-0 z-40 py-4 pointer-events-none" aria-label="Navigation principale">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-14 items-center">
               {/* Logo */}
@@ -63,8 +63,8 @@ export default function Menu() {
                 <Link href="#contact" className="hover:text-secondary transition-colors">
                   CONTACT
                 </Link>
-                <Link href="tel:0672562463" className="text-white px-5 py-2 rounded-full bg-black hover:bg-gray-800 transition-colors ml-2">
-                  06 72 56 24 63
+                <Link href="tel:+33672562464" className="text-white px-5 py-2 rounded-full bg-black hover:bg-gray-800 transition-colors ml-2">
+                  06 72 56 24 64
                 </Link>
               </div>
 
@@ -83,7 +83,7 @@ export default function Menu() {
             </div>
           </div>
         </nav>
-      </div>
+      </header>
 
       {/* Mobile Menu Backdrop */}
       {isOpen && (
@@ -112,25 +112,25 @@ export default function Menu() {
         </div>
         <div className="flex flex-col items-center justify-start pt-4 sm:pt-10 space-y-0 sm:space-y-2 flex-1 pb-20 overflow-y-auto overflow-x-hidden px-2 w-full">
             <Link href="#presentation" onClick={() => setIsOpen(false)}>
-              <Title text="PRÉSENTATION" />
+              <Title text="PRÉSENTATION" as="span" />
             </Link>
             <Link href="#hebergement" onClick={() => setIsOpen(false)}>
-              <Title text="HÉBERGEMENT" />
+              <Title text="HÉBERGEMENT" as="span" />
             </Link>
             <Link href="#activites" onClick={() => setIsOpen(false)}>
-              <Title text="ACTIVITÉS" />
+              <Title text="ACTIVITÉS" as="span" />
             </Link>
             <Link href="#contact" onClick={() => setIsOpen(false)}>
-              <Title text="CONTACT" />
+              <Title text="CONTACT" as="span" />
             </Link>
             
             <div className="mt-8">
               <Link 
-                href="tel:0672562463" 
+                href="tel:+33672562464" 
                 onClick={() => setIsOpen(false)} 
                 className="text-white px-8 py-4 rounded-full bg-black font-bold text-lg inline-block hover:bg-gray-800 transition-colors"
               >
-                06 72 56 24 63
+                06 72 56 24 64
               </Link>
             </div>
         </div>

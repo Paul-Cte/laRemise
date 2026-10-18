@@ -4,7 +4,11 @@ import Menu from '@/components/Menu';
 import Footer from '@/components/Footer';
 
 export const metadata = {
-  title: 'Mentions Légales - La Remise',
+  title: 'Mentions Légales',
+  description: 'Mentions légales et informations éditeur du gîte La Remise à Montmaur (05400), Hautes-Alpes.',
+  alternates: {
+    canonical: '/mentions-legales',
+  },
 };
 
 export default function MentionsLegales() {
